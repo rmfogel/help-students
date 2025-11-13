@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ניהול - עוזר כתיבת הצעות פרויקט</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="admin-container">
+        <header>
+            <h1>ממשק ניהול</h1>
+            <button id="logoutButton" class="action-button">יציאה</button>
+        </header>
+
+        <div class="admin-content">
+            <!-- Settings Section -->
+            <div class="admin-section">
+                <h2>הגדרות מערכת</h2>
+                <div class="setting-item">
+                    <label for="adminApiKey">מפתח API של OpenAI:</label>
+                    <input 
+                        type="password" 
+                        id="adminApiKey" 
+                        placeholder="הזן את מפתח ה-API"
+                    >
+                    <button id="saveAdminApiKey" class="action-button">שמור מפתח</button>
+                    <p class="help-text">
+                        <a href="https://platform.openai.com/api-keys" target="_blank">קבל מפתח API כאן</a>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Active Chats Section -->
+            <div class="admin-section">
+                <h2>צ'אטים פעילים</h2>
+                <div id="chatsList" class="chats-list">
+                    <!-- Chat items will be dynamically added here -->
+                </div>
+            </div>
+
+            <!-- Chat Viewer Section -->
+            <div class="admin-section" id="chatViewerSection" style="display: none;">
+                <div class="chat-viewer-header">
+                    <h2>צפייה בשיחה: <span id="chatTitle"></span></h2>
+                    <button id="closeChatViewer" class="action-button">סגור</button>
+                </div>
+                <div id="chatViewer" class="chat-viewer">
+                    <!-- Selected chat messages will be displayed here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/admin.js"></script>
+</body>
+</html>

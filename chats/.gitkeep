@@ -1,0 +1,2 @@
+# This file ensures the chats directory is kept in git
+# Actual chat files are ignored via .gitignore

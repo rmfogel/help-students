@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>עוזר כתיבת הצעות פרויקט גמר</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>עוזר כתיבת הצעות פרויקט גמר</h1>
+        </header>
+
+        <div class="chat-container">
+            <div id="chatMessages" class="chat-messages">
+                <div class="message assistant-message">
+                    <div class="message-content">
+                        <p>שלום! אני כאן כדי לעזור לך לכתוב את ההצעה לפרויקט הגמר שלך.</p>
+                        <p>ספר לי על הרעיון שלך לפרויקט, ואני אשאל אותך שאלות שיעזרו לך להגדיר אותו בצורה ברורה ומדויקת.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-input-container">
+                <textarea 
+                    id="userInput" 
+                    class="chat-input" 
+                    placeholder="כתוב את ההודעה שלך כאן..."
+                    rows="3"
+                ></textarea>
+                <button id="sendButton" class="send-button">
+                    שלח
+                </button>
+            </div>
+        </div>
+
+        <div class="bottom-actions">
+            <button id="clearChat" class="action-button">נקה שיחה</button>
+            <button id="exportChat" class="action-button">ייצא שיחה</button>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
