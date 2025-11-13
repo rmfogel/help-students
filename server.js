@@ -8,9 +8,15 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Storage paths
-const CHATS_DIR = path.join(__dirname, 'chats');
-const API_KEY_FILE = path.join(__dirname, 'api_key.txt');
-const SYSTEM_PROMPT_FILE = path.join(__dirname, 'system_prompt.txt');
+// In production (Render), use the persistent disk path
+// In development, use local directory
+const BASE_DIR = process.env.NODE_ENV === 'production' 
+    ? '/opt/render/project/src' 
+    : __dirname;
+
+const CHATS_DIR = path.join(BASE_DIR, 'chats');
+const API_KEY_FILE = path.join(BASE_DIR, 'api_key.txt');
+const SYSTEM_PROMPT_FILE = path.join(__dirname, 'system_prompt.txt'); // Always from code directory
 
 // In-memory storage for API key, chats, and system prompt
 let apiKey = process.env.OPENAI_API_KEY || '';
@@ -20,9 +26,13 @@ const chatsMap = new Map();
 // Initialize storage
 async function initializeStorage() {
     try {
+        console.log(`\n=== מאתחל אחסון ===`);
+        console.log(`סביבה: ${process.env.NODE_ENV || 'development'}`);
+        console.log(`נתיב תיקיית צ'אטים: ${CHATS_DIR}`);
+        
         // Create chats directory if it doesn't exist
         await fs.mkdir(CHATS_DIR, { recursive: true });
-        console.log('תיקיית השיחות נוצרה בהצלחה');
+        console.log('✓ תיקיית השיחות נוצרה/נטענה בהצלחה');
         
         // Load API key from file ONLY in development (not in production/Render)
         if (process.env.NODE_ENV !== 'production' && !apiKey) {
@@ -59,8 +69,11 @@ async function initializeStorage() {
 // Load all chats from files
 async function loadAllChats() {
     try {
+        console.log(`מנסה לטעון שיחות מהתיקייה: ${CHATS_DIR}`);
         const files = await fs.readdir(CHATS_DIR);
+        console.log(`נמצאו ${files.length} קבצים בתיקייה`);
         const jsonFiles = files.filter(f => f.endsWith('.json'));
+        console.log(`מתוכם ${jsonFiles.length} קבצי JSON`);
         
         for (const file of jsonFiles) {
             try {
@@ -68,12 +81,13 @@ async function loadAllChats() {
                 const content = await fs.readFile(filePath, 'utf-8');
                 const chat = JSON.parse(content);
                 chatsMap.set(chat.chatId, chat);
+                console.log(`נטען צ'אט: ${chat.chatId} - ${chat.title || 'ללא כותרת'}`);
             } catch (err) {
                 console.error(`שגיאה בטעינת קובץ ${file}:`, err);
             }
         }
         
-        console.log(`נטענו ${chatsMap.size} שיחות מהדיסק`);
+        console.log(`✓ סה"כ נטענו ${chatsMap.size} שיחות מהדיסק`);
     } catch (error) {
         console.error('שגיאה בטעינת השיחות:', error);
     }
@@ -84,7 +98,9 @@ async function saveChatToFile(chat) {
     try {
         const fileName = `${chat.chatId}.json`;
         const filePath = path.join(CHATS_DIR, fileName);
+        console.log(`שומר צ'אט ${chat.chatId} בנתיב: ${filePath}`);
         await fs.writeFile(filePath, JSON.stringify(chat, null, 2), 'utf-8');
+        console.log(`✓ צ'אט ${chat.chatId} נשמר בהצלחה`);
     } catch (error) {
         console.error('שגיאה בשמירת השיחה:', error);
         throw error;
@@ -199,8 +215,10 @@ app.post('/api/chats', async (req, res) => {
 // Get all chats
 app.get('/api/chats', (req, res) => {
     try {
+        console.log(`API Request: /api/chats - יש ${chatsMap.size} שיחות בזיכרון`);
         const chats = Array.from(chatsMap.values())
             .sort((a, b) => new Date(b.lastUpdated) - new Date(a.lastUpdated));
+        console.log(`מחזיר ${chats.length} שיחות ללקוח`);
         res.json(chats);
     } catch (error) {
         console.error('Error getting chats:', error);
