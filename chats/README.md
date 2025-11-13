@@ -39,4 +39,22 @@
 
 ---
 
+## ⚠️ חשוב ל-Production (Render)!
+
+### נתיבי אחסון:
+- **בפיתוח מקומי:** `./chats` (תיקיית הפרויקט)
+- **ב-Render:** `/opt/render/project/src/chats` (על Persistent Disk)
+
+### הגדרת Persistent Disk חובה!
+אם לא תגדיר Persistent Disk ב-Render:
+- ❌ השיחות ימחקו בכל הפעלה מחדש של השרת
+- ❌ ממשק המנהל יהיה ריק
+- ❌ כל הנתונים יאבדו
+
+הוסף Disk בהגדרות Render:
+- **Mount Path:** `/opt/render/project/src`
+- **Size:** 1GB (חינמי)
+
+---
+
 **הערה:** קבצים בתיקייה זו נוצרים אוטומטית על ידי השרת.
