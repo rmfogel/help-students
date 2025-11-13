@@ -24,15 +24,20 @@ async function initializeStorage() {
         await fs.mkdir(CHATS_DIR, { recursive: true });
         console.log('תיקיית השיחות נוצרה בהצלחה');
         
-        // Load API key from file if exists
-        try {
-            const savedApiKey = await fs.readFile(API_KEY_FILE, 'utf-8');
-            if (savedApiKey.trim()) {
-                apiKey = savedApiKey.trim();
-                console.log('מפתח API נטען מהקובץ');
+        // Load API key from file ONLY in development (not in production/Render)
+        if (process.env.NODE_ENV !== 'production' && !apiKey) {
+            try {
+                const savedApiKey = await fs.readFile(API_KEY_FILE, 'utf-8');
+                if (savedApiKey.trim()) {
+                    apiKey = savedApiKey.trim();
+                    console.log('מפתח API נטען מהקובץ (מצב פיתוח)');
+                }
+            } catch (err) {
+                // File doesn't exist yet, that's okay
+                console.log('לא נמצא קובץ api_key.txt - השתמש במשתנה סביבה או בממשק המנהל');
             }
-        } catch (err) {
-            // File doesn't exist yet, that's okay
+        } else if (apiKey) {
+            console.log('מפתח API נטען ממשתנה סביבה');
         }
         
         // Load system prompt from file
@@ -98,10 +103,17 @@ async function deleteChatFile(chatId) {
     }
 }
 
-// Save API key to file
+// Save API key to file (only in development, not production)
 async function saveApiKeyToFile(key) {
+    // In production (Render), don't save to file - use environment variables only
+    if (process.env.NODE_ENV === 'production') {
+        console.log('מצב production - מפתח API לא נשמר לקובץ (השתמש במשתני סביבה)');
+        return;
+    }
+    
     try {
         await fs.writeFile(API_KEY_FILE, key, 'utf-8');
+        console.log('מפתח API נשמר לקובץ (מצב פיתוח)');
     } catch (error) {
         console.error('שגיאה בשמירת מפתח API:', error);
         throw error;

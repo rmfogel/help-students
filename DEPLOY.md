@@ -38,24 +38,29 @@ Render אמור לזהות אוטומטית את ההגדרות מ-`render.yaml`
 - **Instance Type:** Free
 - **Auto-Deploy:** Yes (מומלץ)
 
-## שלב 5: הגדרת משתני סביבה (Environment Variables)
+## שלב 5: הגדרת משתני סביבה (Environment Variables) - חובה!
 
-לחץ על **"Environment"** ב-Render והוסף:
+לחץ על **"Environment"** ב-Render והוסף את המפתח:
 
-### אופציה 1: אם אין לך את המפתח עדיין
-אל תוסיף כלום עכשיו - המערכת תעבוד בלי מפתח, והמנהל יצטרך להזין אותו דרך ממשק הניהול.
-
-### אופציה 2: אם יש לך מפתח API
+### הוספת מפתח OpenAI API (חובה!)
 ```
 Key: OPENAI_API_KEY
-Value: sk-your-actual-api-key-here
+Value: sk-proj-[המפתח המלא שלך]
 ```
 
-**אופציונלי:**
+⚠️ **חשוב מאוד:** 
+- מפתח ה-API **חייב** להיות מוגדר כאן ב-Render
+- לא תהיה אפשרות להזין מפתח דרך ממשק המנהל ב-production
+- זה בטוח יותר - המפתח לא נשמר בקבצים
+
+### משתנה נוסף (אוטומטי):
+Render מוסיף אוטומטית:
 ```
-Key: PORT
-Value: 3000
+Key: NODE_ENV
+Value: production
 ```
+
+זה מוודא שהמפתח לא יישמר בקבצים.
 
 ## שלב 6: Persistent Disk (חשוב!)
 

@@ -97,10 +97,16 @@ npm run dev
 
 ## אבטחה 🔒
 
-- מפתח ה-API נשמר בקובץ מקומי בשרת (לא נחשף למשתמשים)
+- מפתח ה-API נשמר בקובץ מקומי בשרת (**פיתוח בלבד** - לא נחשף למשתמשים)
+- **בסביבת production:** מפתח ה-API נשמר רק כמשתנה סביבה ב-Render (אף פעם לא בקבצים)
 - ממשק המנהל מוגן בסיסמה
-- קבצי השיחות ומפתח ה-API לא מועלים ל-Git
-- **חשוב:** בסביבת ייצור, החלף את הסיסמה והצפן את הקבצים
+- קבצי השיחות ומפתח ה-API לא מועלים ל-Git (`.gitignore`)
+- **חשוב:** בסביבת ייצור, המערכת משתמשה אוטומטית במשתני סביבה בלבד
+
+### פיתוח מקומי vs Production
+- **מקומי:** השתמש ב-`api_key.txt` להגדרת מפתח
+- **Production (Render):** הגדר `OPENAI_API_KEY` במשתני סביבה של Render
+- המערכת מזהה אוטומטית את הסביבה ופועלת בהתאם
 
 ## פתרון בעיות 🔧
 
